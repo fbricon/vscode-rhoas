@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { getRedHatService, TelemetryService } from "@redhat-developer/vscode-redhat-telemetry";
 import { authentication, commands, ExtensionContext, ProgressLocation, window } from 'vscode';
-import { openRHOSAKDashboard, registerCommands } from './commands';
+import { CREATE_RHOSAK_CLUSTER_CMD, openRHOSAKDashboard, registerCommands } from './commands';
 import { rhosakService } from './rhosakService';
 import { convertAll } from './utils';
 import { Cluster, ClusterProviderParticipant, ClusterSettings, ConnectionOptions, KafkaConfig, KafkaExtensionParticipant } from './vscodekafka-api';
 
 const RHOSAK_LABEL = "Red Hat OpenShift Streams for Apache Kafka";
 const OPEN_DASHBOARD = 'Open Dashboard';
+const CREATE_CLUSTER = 'Create a new remote cluster';
 
 export async function activate(context: ExtensionContext): Promise<KafkaExtensionParticipant> {
 	let telemetryService: TelemetryService = await (await getRedHatService(context)).getTelemetryService();
@@ -49,7 +50,7 @@ async function configureClusters(clusterSettings: ClusterSettings, telemetryServ
 		});
 	} catch (error) {
 		let event = {	
-			name: "rhoas.add.rhosak.clusters.failure",
+			name: "rhoas.add.rhosak.clusters",
 			properties: {
 				"error": `${error}`
 			}
@@ -85,8 +86,10 @@ async function configureClusters(clusterSettings: ClusterSettings, telemetryServ
 		window.showInformationMessage(`All ${RHOSAK_LABEL} clusters have already been added`);
 	} else {
 		// Should open the landing page
-		const action = await window.showWarningMessage(`No ${RHOSAK_LABEL} cluster available!`, OPEN_DASHBOARD);
-		if (action === OPEN_DASHBOARD) {
+		const action = await window.showWarningMessage(`No ${RHOSAK_LABEL} cluster available!`, CREATE_CLUSTER, OPEN_DASHBOARD);
+		if (action === CREATE_CLUSTER) {
+			commands.executeCommand(CREATE_RHOSAK_CLUSTER_CMD);
+		} else if (action === OPEN_DASHBOARD) {
 			openRHOSAKDashboard(telemetryService, "No clusters");
 		}
 	}

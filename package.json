@@ -36,12 +36,27 @@
 				"command": "rhoas.open.RHOSAKDashboard",
 				"category": "Red Hat",
 				"title": "Open Red Hat OpenShift Streams for Apache Kafka Dashboard"
+			},
+			{
+				"command": "rhoas.create.RHOSAKCluster",
+				"category": "Red Hat",
+				"title": "Create a Red Hat OpenShift Streams for Apache Kafka cluster"
+			},
+			{
+				"command": "rhoas.delete.RHOSAKCluster",
+				"category": "Red Hat",
+				"title": "Delete remote cluster"
 			}
 		],
 		"menus": {
 			"view/item/context": [
 				{
 					"command": "rhoas.open.RHOSAKDashboard",
+					"when": "view == kafkaExplorer && viewItem =~ /^cluster-rhosak$|^selectedCluster-rhosak$/ && !listMultiSelection",
+					"group": "0_rhosak"
+				},
+				{
+					"command": "rhoas.delete.RHOSAKCluster",
 					"when": "view == kafkaExplorer && viewItem =~ /^cluster-rhosak$|^selectedCluster-rhosak$/ && !listMultiSelection",
 					"group": "0_rhosak"
 				}
@@ -54,7 +69,9 @@
 	],
 	"main": "./dist/extension.js",
 	"activationEvents": [
-		"onCommand:rhoas.open.RHOSAKDashboard"
+		"onCommand:rhoas.open.RHOSAKDashboard",
+		"onCommand:rhoas.create.RHOSAKCluster",
+		"onCommand:rhoas.delete.RHOSAKCluster"
 	],
 	"scripts": {
 		"vscode:prepublish": "npm run package",
@@ -85,6 +102,6 @@
 	},
 	"dependencies": {
 		"@redhat-developer/vscode-redhat-telemetry": "0.2.0",
-		"@rhoas/kafka-management-sdk": "0.9.0"
+		"@rhoas/kafka-management-sdk": "0.12.2"
 	}
 }

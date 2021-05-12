@@ -4,11 +4,16 @@
 
 ## What's included in the `Red Hat OpenShift Application Services` telemetry data
 
- * A telemetry event is sent every time new Kafka clusters have been added
+ * A telemetry event is sent every time new Kafka clusters have been added to the Kafka explorer.
     - includes the number of added clusters
+    - the error message if there was an error
  * A telemetry event is sent every time the "Red Hat OpenShift Streams for Apache Kafka" dashboard is opened, via the command palette or clicking on a button
     - includes the reason why it was opened
- * A telemetry event is sent every time an error occurred while fetching Kafka clusters.
+ * A telemetry event is sent a new "Red Hat OpenShift Streams for Apache Kafka" cluster is created. Data includes:
+    - the cloud provider
+    - the cloud region
+    - multizone or not
+    - the error message if there was an error
 
 ## What's included in the general telemetry data
 
